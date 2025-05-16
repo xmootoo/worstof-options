@@ -62,7 +62,7 @@ $$
 This approach ensures that the log returns of both assets from initial to terminal time maintain correlation $\rho$:
 
 $$
-\rho = \text{Corr}\left( \log\left( \frac{S^{(1)}_T}{S^{(1)}_{0}} \right), \log\left( \frac{S^{(2)}_T}{S^{(2)}_{0}} \right) \right)
+\rho = \text{Corr}\left( \log(S_T^{(1)} / S_0^{(1)}), \log(S_T^{(2)} / S_0^{(2)}) \right)
 = \text{Corr}\left( \log(\bar{S}_T^{(1)}), \log(\bar{S}_T^{(2)}) \right)
 $$
 
