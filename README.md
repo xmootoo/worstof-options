@@ -45,20 +45,12 @@ $$
 
 This transformation forces $\text{Corr}(Z^{(1)}, Z^{(2)}) = \rho$. Using these correlated variables, we directly simulate the terminal asset values at time $T$:
 
-<!-- $$
-\begin{align*}
-   S^{(1)}_T &= S^{(1)}_{0} \exp\Big(\left(\mu^{(1)} - \frac{(\sigma^{(1)})^2}{2}\right)T + \sigma^{(1)} \sqrt{T} Z^{(1)}\Big), \\
-   S^{(2)}_T &= S^{(2)}_{0} \exp\Big(\left(\mu^{(2)} - \frac{(\sigma^{(2)})^2}{2}\right)T + \sigma^{(2)} \sqrt{T} Z^{(2)}\Big).
-\end{align*}
-$$ -->
-
 $$
 \begin{align*}
-   S^{(1)}_T &= S^{(1)}_{0} \exp\left((\mu^{(1)} - \frac{(\sigma^{(1)})^2}{2})T + \sigma^{(1)} \sqrt{T} Z^{(1)}\right), \\
-   S^{(2)}_T &= S^{(2)}_{0} \exp\left((\mu^{(2)} - \frac{(\sigma^{(2)})^2}{2})T + \sigma^{(2)} \sqrt{T} Z^{(2)}\right).
+   S_T^{(1)} &= S_0^{(1)} \exp\left( (\mu^{(1)} - (\sigma^{(1)})^2 / 2) T + \sigma^{(1)} \sqrt{T} Z^{(1)} \right), \\
+   S_T^{(2)} &= S_0^{(2)} \exp\left( (\mu^{(2)} - (\sigma^{(2)})^2 / 2) T + \sigma^{(2)} \sqrt{T} Z^{(2)} \right)
 \end{align*}
 $$
-
 This approach ensures that the log returns of both assets from initial to terminal time maintain correlation $\rho$:
 
 $$
@@ -69,8 +61,8 @@ $$
 where:
 $$
 \begin{align*}
-   \bar{S}_T^{(1)} &= \frac{S_T^{(1)}}{S_0^{(1)}}, \\
-   \bar{S}_T^{(2)} &= \frac{S_T^{(2)}}{S_0^{(2)}}
+   \bar{S}_T^{(1)} &= S_T^{(1)} / S_0^{(1)}, \\
+   \bar{S}_T^{(2)} &= S_T^{(2)} / S_0^{(2)}
 \end{align*}
 $$
 are the normalized maturity prices. By engineering correlation at the log-return level over the entire time horizon, we capture the fundamental relationship between asset movements in a single step, which is computationally more efficient than simulating the full path while maintaining consistency with financial theory.
