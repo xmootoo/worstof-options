@@ -68,20 +68,15 @@ are the normalized maturity prices. By engineering correlation at the log-return
 #### Control Variates for Worst-Of Options
 For basket options with worst-of payoffs, we can extend the control variate technique using an indicator-based approach that focuses on the asset determining the payoff. Since the option pays based on the worst-performing asset, we apply a selective control variate adjustment with:
 
-$$\hat{f}(\mathbf{S}_T) = f(\mathbf{S}_T) - I(\mathbf{\bar{S}}_T) \cdot \beta_1({S_T^{(1)} - \mathbb{E}[S_T^{(1)}]}) - (1-I(\mathbf{\bar{S}}_T)) \cdot \beta_2(S_T^{(2)} - \mathbb{E}[S_T^{(2)}]),$$
+$$\hat{f}(S_T) = f(S_T) - I(\bar{S}_T) \cdot \beta_1({S_T^{(1)} - \mathbb{E}[S_T^{(1)}]}) - (1-I(\bar{S}_T)) \cdot \beta_2(S_T^{(2)} - \mathbb{E}[S_T^{(2)}]),$$
 
-where $\mathbf{S}_T = (S_T^{(1)}, S_T^{(2)})^T$ are the terminal values from Monte Carlo, and:
-$$
-\begin{align*}
-   I(\mathbf{\bar{S}}_T) = \begin{cases} 
-      1 &\text{if } \bar{S}_T^{(1)} \leq \bar{S}_T^{(2)} \\
-      0 &\text{otherwise}
-   \end{cases}
-\end{align*}
-$$
-is an indicator function which is $1$ if asset 1 is the worst-performing asset, and 0 otherwise, with respect to the normalized maturity prices $\mathbf{\bar{S}}_T = (\bar{S}_T^{(1)}, \bar{S}_T^{(2)})^T$. The optimal coefficients are calculated conditionally:
+where $S_T = (S_T^{(1)}, S_T^{(2)})^T$ is the vector of prices at maturity, and $\bar{S}_T = (\bar{S}_T^{(1)}, \bar{S}_T^{(2)})^T$ are the normalized returns at maturity. The function:
 
-$$\beta_1 = \frac{\text{Cov}(f(\mathbf{S}_T), S_T^{(1)} | S_T^{(1)} \leq S_T^{(2)})}{\text{Var}(S_T^{(1)} | S_T^{(1)} \leq S_T^{(2)})}, \quad \beta_2 = \frac{\text{Cov}(f(\mathbf{S}_T), S_T^{(2)} | S_T^{(2)} < S_T^{(1)})}{\text{Var}(S_T^{(2)} | S_T^{(2)} < S_T^{(1)})}$$
+- $I(\bar{S}_T) = 1 \text{ if }  \bar{S}_T^{(1)} \leq \bar{S}_T^{(2)}, \text{else } 0$
+
+is an indicator function which is $1$ if asset 1 is the worst-performing and $0$ if asset 2 is the worst-performing. The optimal coefficients are calculated conditionally:
+
+$$\beta_1 = \frac{\text{Cov}(f(S_T), S_T^{(1)} | S_T^{(1)} \leq S_T^{(2)})}{\text{Var}(S_T^{(1)} | S_T^{(1)} \leq S_T^{(2)})}, \quad \beta_2 = \frac{\text{Cov}(f(S_T), S_T^{(2)} | S_T^{(2)} < S_T^{(1)})}{\text{Var}(S_T^{(2)} | S_T^{(2)} < S_T^{(1)})}$$
 
 This approach targets the variance reduction specifically to the asset driving the payoff in each simulation path. The underlying asset correlation structure is implicitly captured through the Monte Carlo paths generated via Cholesky decomposition, without requiring explicit handling in the control variate implementation. This selective adjustment efficiently reduces variance in worst-of option pricing, particularly for options sensitive to the relative performance between the basket assets.
 
@@ -96,14 +91,14 @@ The implementation is contained in [`worst_of_option.py`](worst_of_option.py), w
 
 #### Limitations & Future Improvements
 
-While this method effectively generalizes the approach and experiments confirm variance reduction, there are opportunities for enhancement. The control variate model faces challenges with discontinuities at boundaries where assets have similar performance, and the current formulation of $\hat{f}(\mathbf{S}_T)$ doesn't fully capture asset interaction effects.
+While this method effectively generalizes the approach and experiments confirm variance reduction, there are opportunities for enhancement. The control variate model faces challenges with discontinuities at boundaries where assets have similar performance, and the current formulation of $\hat{f}(S_T)$ doesn't fully capture asset interaction effects.
 
 These limitations occasionally affected the calculation of $\beta_1$ and $\beta_2$ coefficients, sometimes resulting in large values that could produce theoretically impossible negative payoffs, and negative option prices as a result. To address this, I implemented two stabilizing mechanisms in `monte_carlo_worstof_option`:
 
 1. A `dampening_factor` parameter to scale the control variate correction (providing smaller corrections)
 2. A `clip_payoffs` argument to ensure non-negative payoffs
 
-These adjustments successfully balance variance reduction with pricing accuracy for most scenarios. Future enhancements could incorporate correlation coefficients $\rho$ and interaction terms directly into $\hat{f}(\mathbf{S}_T)$, potentially achieving even greater variance reduction while maintaining pricing integrity.
+These adjustments successfully balance variance reduction with pricing accuracy for most scenarios. Future enhancements could incorporate correlation coefficients $\rho$ and interaction terms directly into $\hat{f}(S_T)$, potentially achieving even greater variance reduction while maintaining pricing integrity.
 
 
 #### Dataset Generation
