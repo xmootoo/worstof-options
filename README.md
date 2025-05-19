@@ -17,7 +17,7 @@ A **worst-of option** is an exotic derivative based on a basket of underlying as
 - **Payoff Trigger**: The option references the *minimum* normalized return across assets.
 - **Payoff Function**:
 
-    $$\text{Payoff}_{\text{call}} = \max(\min(\bar{S}_1(T), \bar{S}_2(T)) - K, 0)$$
+    $$\text{Payoff}_{\text{call}} = \max( \min(\bar{S}_1(T), \bar{S}_2(T)) - K, 0)$$
   
     $$\text{Payoff}_{\text{put}} = \max(K - \min(\bar{S}_1(T), \bar{S}_2(T)), 0)$$
 
