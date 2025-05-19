@@ -17,9 +17,9 @@ A **worst-of option** is an exotic derivative based on a basket of underlying as
 - **Payoff Trigger**: The option references the *minimum* normalized return across assets.
 - **European Payoff Example**:
 
-    $$\begin{align*}\text{Payoff} &= \max(\min(\bar{S}_1(T), \bar{S}_2(T)) - K, 0) \\ \tag{Call}
+    $$\text{Payoff}_{\text{call}} &= \max(\min(\bar{S}_1(T), \bar{S}_2(T)) - K, 0) $$
   
-    \text{Payoff} &= \max(K - \min(\bar{S}_1(T), \bar{S}_2(T)), 0) \tag{Put}\end{align*}$$
+    $$\text{Payoff}_{\text{put}} &= \max(K - \min(\bar{S}_1(T), \bar{S}_2(T)), 0)$$
 
 Where $\bar{S}_i(T) = S_i(T) / S_i(0)$ is normalized return at maturity, and $K \in [0, 1]$ is the strike performance.
 
